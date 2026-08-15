@@ -1,0 +1,158 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Palette: Haitian flag blue as the brand primary, warm mango amber as the
+  conversion accent. Amber never carries white text (3.19:1 fails AA), so its
+  foreground is near-black. Red is reserved for `destructive` only, which is
+  why the CTA is amber rather than flag red.
+*/
+:root {
+  --radius: 0.75rem;
+
+  --background: #ffffff;
+  --foreground: #0c1633;
+
+  --card: #ffffff;
+  --card-foreground: #0c1633;
+
+  --popover: #ffffff;
+  --popover-foreground: #0c1633;
+
+  --primary: #0b3fa8;
+  --primary-foreground: #ffffff;
+
+  --secondary: #f1f3f9;
+  --secondary-foreground: #142352;
+
+  --muted: #f1f3f9;
+  --muted-foreground: #55607d;
+
+  /* shadcn semantic: neutral hover/active surface for menus and ghost buttons.
+     This is deliberately NOT the brand accent — see --cta below. */
+  --accent: #eaeefb;
+  --accent-foreground: #142352;
+
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+
+  --border: #dfe3ee;
+  --input: #dfe3ee;
+  --ring: #0b3fa8;
+
+  /* Brand conversion accent, used for promos, price highlights and hero CTA. */
+  --cta: #f59e0b;
+  --cta-foreground: #1a1206;
+
+  --chart-1: #0b3fa8;
+  --chart-2: #f59e0b;
+  --chart-3: #0e9f6e;
+  --chart-4: #7fa5f5;
+  --chart-5: #d21034;
+}
+
+.dark {
+  --background: #0a0f20;
+  --foreground: #e9ecf5;
+
+  --card: #111830;
+  --card-foreground: #e9ecf5;
+
+  --popover: #111830;
+  --popover-foreground: #e9ecf5;
+
+  --primary: #7fa5f5;
+  --primary-foreground: #0a0f20;
+
+  --secondary: #1b2440;
+  --secondary-foreground: #e9ecf5;
+
+  --muted: #1b2440;
+  --muted-foreground: #a0a9c0;
+
+  --accent: #222d4d;
+  --accent-foreground: #e9ecf5;
+
+  --destructive: #f87171;
+  --destructive-foreground: #0a0f20;
+
+  --border: #26314f;
+  --input: #26314f;
+  --ring: #7fa5f5;
+
+  --cta: #fbbf24;
+  --cta-foreground: #1a1206;
+
+  --chart-1: #7fa5f5;
+  --chart-2: #fbbf24;
+  --chart-3: #34d399;
+  --chart-4: #0b3fa8;
+  --chart-5: #f87171;
+}
+
+@theme inline {
+  --font-sans: var(--font-nunito-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-rubik), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-cta: var(--cta);
+  --color-cta-foreground: var(--cta-foreground);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-synthesis-weight: none;
+  }
+
+  /* Prices and quantities line up in product grids and cart totals. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
