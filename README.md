@@ -92,7 +92,23 @@ npm run gen:images -- --force --yes             # refait celles qui existent dé
 ```
 
 Sans `--yes`, le script se contente de lister ce qu'il ferait : chaque image consomme
-des crédits Higgsfield.
+des crédits Higgsfield (2 crédits par image en 1k, mesuré).
+
+### Télécharger des images déjà générées
+
+Génération et téléchargement ne se font pas forcément au même endroit : certains
+environnements joignent l'API Higgsfield mais pas son CDN. `src/lib/product-sources.json`
+associe donc un id de produit à l'URL de son image générée, et un second script se
+charge du rapatriement :
+
+```bash
+npm run fetch:images            # télécharge les URL de product-sources.json
+npm run fetch:images -- --force # re-télécharge celles déjà présentes
+```
+
+Ce script n'appelle pas l'API : ni clé, ni crédit. Une image qui échoue au
+téléchargement est retirée du manifeste, pour que le site ne pointe jamais vers un
+fichier absent.
 
 Les fichiers atterrissent dans `public/products/`, et le script écrit
 `src/lib/product-images.json`, qui associe un id de produit à son chemin. La carte
@@ -111,9 +127,10 @@ Ce qui n'existe pas encore :
 - `src/lib/products.ts` est un catalogue en dur, à remplacer par le flux du
   fournisseur dropshipping.
 - Le panier est un bouton sans état ; aucune logique de commande ni de paiement.
-- Aucune image produit n'a encore été générée : `src/lib/product-images.json` est
-  vide et toutes les cartes affichent le dégradé de remplacement. Le script de
-  génération est en place mais n'a jamais tourné contre l'API (pas de clé).
+- Une seule image produit a été générée (`casque-bluetooth-pro`), et son URL est
+  dans `product-sources.json`. Elle n'est pas encore dans le dépôt : lancez
+  `npm run fetch:images` pour la récupérer. Les 7 autres produits affichent le
+  dégradé de remplacement.
 
 ## Skills IA
 

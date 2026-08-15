@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "gen:images": "node --experimental-strip-types scripts/generate-product-images.mjs"
+    "gen:images": "node --experimental-strip-types scripts/generate-product-images.mjs",
+    "fetch:images": "node scripts/fetch-product-images.mjs"
   },
   "dependencies": {
     "@higgsfield/client": "^0.2.1",
