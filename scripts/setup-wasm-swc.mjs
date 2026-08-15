@@ -45,10 +45,13 @@ async function main() {
 
   // The WASM build must match the Next version exactly, or the bindings differ.
   console.log(`Installation de ${PKG}@${version} (~29 Mo)…`);
-  execFileSync("npm", ["install", "--no-save", `${PKG}@${version}`], {
-    cwd: ROOT,
-    stdio: "inherit",
-  });
+  // --no-package-lock matters as much as --no-save: without it npm rewrites
+  // package-lock.json, and the dirty file blocks the next `git pull`.
+  execFileSync(
+    "npm",
+    ["install", "--no-save", "--no-package-lock", `${PKG}@${version}`],
+    { cwd: ROOT, stdio: "inherit" },
+  );
 
   if (!existsSync(path.join(INSTALLED, "wasm.js"))) {
     console.error(`\nÉchec : ${PKG} est absent de node_modules après l'installation.`);
