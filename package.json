@@ -11,10 +11,11 @@
     "fetch:images": "node scripts/fetch-product-images.mjs",
     "dev:webpack": "next dev --webpack",
     "build:webpack": "next build --webpack",
-    "setup:android": "npm install @next/swc-wasm-nodejs@16.3.1"
+    "setup:wasm": "node scripts/setup-wasm-swc.mjs"
   },
   "dependencies": {
     "@higgsfield/client": "^0.2.1",
+    "@next/swc-wasm-nodejs": "^16.3.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.31.0",

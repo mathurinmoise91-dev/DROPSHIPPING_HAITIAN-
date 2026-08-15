@@ -42,13 +42,31 @@ Trois issues, de la plus fiable à la plus bricolée :
 3. **La solution de repli WebAssembly**, sur place :
 
    ```bash
-   npm install @next/swc-wasm-nodejs@16.3.1
+   npm run setup:wasm
    npm run dev:webpack
    ```
 
    Le repli WASM ne fonctionne qu'avec webpack, pas avec Turbopack — d'où les
-   scripts `dev:webpack` et `build:webpack`. Comptez une compilation nettement plus
-   lente qu'en natif.
+   scripts `dev:webpack` et `build:webpack`. Comptez une compilation plus lente
+   qu'en natif.
+
+   **`npm install @next/swc-wasm-nodejs` seul ne suffit pas**, et c'est
+   contre-intuitif : Next ne résout pas ce binding comme un module npm. Dans
+   `next/dist/build/swc/index.js`, il appelle `pathToFileURL(pkgPath)` — il traite
+   donc le nom comme un *chemin de fichier*, et ne regarde jamais dans
+   `node_modules/@next/`. Son propre repli télécharge le package vers
+   `node_modules/next/wasm/`, et quand ce téléchargement échoue le message est
+   trompeur :
+
+   ```
+   Attempted to load @next/swc-wasm-nodejs, but it was not installed
+   ```
+
+   … alors que le package est bel et bien installé. `npm run setup:wasm` copie donc
+   les fichiers directement dans `node_modules/next/wasm/@next/`, ce qui supprime
+   toute dépendance au réseau.
+
+   À relancer après chaque `npm install`, qui élague le package non sauvegardé.
 
 `next.config.mjs` est volontairement en ESM et non en TypeScript : charger une
 config TS réclame le binaire SWC, ce qui ferait échouer le démarrage avant même
