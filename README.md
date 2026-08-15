@@ -23,6 +23,37 @@ npm run build   # build de production
 npm run lint
 ```
 
+## Android / Termux
+
+Next.js ne tourne pas nativement sous Termux. Il compile avec SWC, distribué en
+binaires précompilés, et les cibles Android ont été abandonnées après la v13
+(`android-arm-eabi` s'arrête à 12.3.4, `android-arm64` à 13.2.5). Le 32 bits ARM
+sous Linux s'arrête lui à 12.3.6. Sur ces plateformes `next dev` démarre puis
+échoue avec `Failed to load SWC binary for android/arm`.
+
+Trois issues, de la plus fiable à la plus bricolée :
+
+1. **Un ordinateur** (Linux, macOS ou Windows, x64 ou arm64). Tout fonctionne sans
+   réglage.
+2. **Une distribution Linux dans Termux**, via `proot-distro` (Debian ou Ubuntu en
+   arm64). L'environnement se présente alors comme `linux`/`arm64`, et le binaire
+   `@next/swc-linux-arm64-gnu` s'installe normalement. Demande un appareil et un
+   Termux 64 bits.
+3. **La solution de repli WebAssembly**, sur place :
+
+   ```bash
+   npm install @next/swc-wasm-nodejs@16.3.1
+   npm run dev:webpack
+   ```
+
+   Le repli WASM ne fonctionne qu'avec webpack, pas avec Turbopack — d'où les
+   scripts `dev:webpack` et `build:webpack`. Comptez une compilation nettement plus
+   lente qu'en natif.
+
+`next.config.mjs` est volontairement en ESM et non en TypeScript : charger une
+config TS réclame le binaire SWC, ce qui ferait échouer le démarrage avant même
+d'arriver au code de l'application.
+
 ## Design system
 
 Les tokens vivent dans `src/app/globals.css`, en variables CSS mappées vers Tailwind

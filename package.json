@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "gen:images": "node --experimental-strip-types scripts/generate-product-images.mjs",
-    "fetch:images": "node scripts/fetch-product-images.mjs"
+    "fetch:images": "node scripts/fetch-product-images.mjs",
+    "dev:webpack": "next dev --webpack",
+    "build:webpack": "next build --webpack"
   },
   "dependencies": {
     "@higgsfield/client": "^0.2.1",
