@@ -60,6 +60,46 @@ src/
     utils.ts     helper cn()
 ```
 
+## Images produits (Higgsfield)
+
+Les visuels sont générés par `scripts/generate-product-images.mjs`, qui utilise le
+SDK `@higgsfield/client`.
+
+**Pourquoi le SDK et pas la CLI Higgsfield.** La CLI est un binaire précompilé publié
+pour `darwin`/`linux` en `x64`/`arm64` uniquement : elle ne s'installe pas sur
+Android/Termux (`EBADPLATFORM`), et son `auth login` passe par un OAuth avec callback
+sur `localhost`, inutilisable depuis un environnement distant. Le SDK est du
+JavaScript pur et s'authentifie par clé API, donc il fonctionne partout.
+
+### Configurer la clé
+
+Récupérez une clé API dans le tableau de bord Higgsfield, puis :
+
+```bash
+export HF_API_KEY=<key_id>
+export HF_API_SECRET=<key_secret>
+# ou, en une seule variable :
+export HF_CREDENTIALS=<key_id>:<key_secret>
+```
+
+### Générer
+
+```bash
+npm run gen:images                              # simulation, ne dépense rien
+npm run gen:images -- --yes                     # génère les images manquantes
+npm run gen:images -- --only <id> --yes         # un seul produit
+npm run gen:images -- --force --yes             # refait celles qui existent déjà
+```
+
+Sans `--yes`, le script se contente de lister ce qu'il ferait : chaque image consomme
+des crédits Higgsfield.
+
+Les fichiers atterrissent dans `public/products/`, et le script écrit
+`src/lib/product-images.json`, qui associe un id de produit à son chemin. La carte
+produit lit ce manifeste : un produit absent garde le dégradé de remplacement, ce qui
+permet à la grille de s'afficher avant qu'aucune image n'existe. Le créneau reste en
+1:1 dans les deux cas, donc ajouter une image ne décale jamais la mise en page.
+
 ## État actuel
 
 La page d'accueil est en place (hero, grille produits, réassurance, CTA final).
@@ -71,8 +111,9 @@ Ce qui n'existe pas encore :
 - `src/lib/products.ts` est un catalogue en dur, à remplacer par le flux du
   fournisseur dropshipping.
 - Le panier est un bouton sans état ; aucune logique de commande ni de paiement.
-- Les visuels produits sont des dégradés de remplacement, au bon ratio pour éviter
-  le décalage de mise en page une fois les vraies images branchées.
+- Aucune image produit n'a encore été générée : `src/lib/product-images.json` est
+  vide et toutes les cartes affichent le dégradé de remplacement. Le script de
+  génération est en place mais n'a jamais tourné contre l'API (pas de clé).
 
 ## Skills IA
 
