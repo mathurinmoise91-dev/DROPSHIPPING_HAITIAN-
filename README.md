@@ -62,11 +62,20 @@ Trois issues, de la plus fiable à la plus bricolée :
    Attempted to load @next/swc-wasm-nodejs, but it was not installed
    ```
 
-   … alors que le package est bel et bien installé. `npm run setup:wasm` copie donc
-   les fichiers directement dans `node_modules/next/wasm/@next/`, ce qui supprime
-   toute dépendance au réseau.
+   … alors que le package est bel et bien installé, un dossier à côté.
 
-   À relancer après chaque `npm install`, qui élague le package non sauvegardé.
+   `setup:wasm` récupère donc le tarball depuis le registre npm et l'extrait
+   directement dans `node_modules/next/wasm/@next/`. Il n'appelle pas `npm`, pour
+   deux raisons : npm 12 applique une politique `allowScripts` qui refuse certains
+   installs projet avec `EALLOWSCRIPTS`, et tout `npm install` risque de réécrire
+   `package-lock.json`, dont l'état modifié bloque ensuite `git pull`. Ce package
+   ne contient aucun script d'installation, l'extraction suffit.
+
+   Le script est idempotent et vérifie que la version correspond exactement à
+   celle de Next. Il a besoin de `tar` (`pkg install tar` sur Termux).
+   `--force` refait l'opération.
+
+   À relancer après un `npm install` qui aurait nettoyé `node_modules`.
 
 `next.config.mjs` est volontairement en ESM et non en TypeScript : charger une
 config TS réclame le binaire SWC, ce qui ferait échouer le démarrage avant même
