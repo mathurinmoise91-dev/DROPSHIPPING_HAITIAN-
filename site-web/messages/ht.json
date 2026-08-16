@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "SITE-WEB — Mache ayisyen",
+    "description": "Achte lakay machann ki verifye toupatou nan peyi a. Pri an goud, peye lè yo livre, livrezon ou ka swiv."
+  },
+  "nav": {
+    "brand": "SITE-WEB",
+    "home": "Akèy",
+    "explore": "Eksplore",
+    "favorites": "Favori",
+    "cart": "Panye",
+    "account": "Kont",
+    "signIn": "Konekte",
+    "becomeSeller": "Vin yon machann",
+    "openMenu": "Ouvri meni an",
+    "primaryLabel": "Navigasyon prensipal"
+  },
+  "search": {
+    "label": "Chèche yon pwodwi oswa yon boutik",
+    "placeholder": "Chèche yon pwodwi, yon boutik…"
+  },
+  "locale": {
+    "label": "Chanje lang"
+  },
+  "theme": {
+    "label": "Chanje tèm",
+    "light": "Klè",
+    "dark": "Fonse",
+    "system": "Sistèm"
+  },
+  "home": {
+    "hero": {
+      "badge": "Peye lè yo livre",
+      "title": "Achte toupatou nan peyi a,",
+      "titleAccent": "san enkyetid",
+      "lede": "Machann ki verifye, pri an goud, yon livrezon ou ka swiv jouk devan pòt ou.",
+      "ctaPrimary": "Eksplore mache a",
+      "ctaSecondary": "Vin yon machann"
+    },
+    "stats": {
+      "shops": "Boutik ki enskri",
+      "products": "Pwodwi an liy",
+      "currency": "Sèl lajan"
+    },
+    "categories": {
+      "title": "Kategori",
+      "productCount": "{count, plural, =0 {Pa gen pwodwi} one {# pwodwi} other {# pwodwi}}"
+    },
+    "shops": {
+      "title": "Boutik nou mete devan",
+      "seeAll": "Wè tout",
+      "emptyTitle": "Pa gen boutik ki enskri",
+      "emptyBody": "Premye machann yo ap vini. Tounen byento."
+    },
+    "products": {
+      "title": "Pwodwi moun pi renmen",
+      "seeAll": "Wè tout",
+      "emptyTitle": "Pa gen pwodwi pou kounye a",
+      "emptyBody": "Katalòg la ap ouvri lè premye boutik yo fin enskri."
+    },
+    "trust": {
+      "title": "Kòmande san enkyetid",
+      "deliveryTitle": "Livrezon toupatou nan peyi a",
+      "deliveryBody": "Pòtoprens, Okap, Okay ak gwo vil yo, avèk yon swivi nan chak etap.",
+      "paymentTitle": "Peye an goud",
+      "paymentBody": "Lè yo livre a, lè bwat la nan men ou. Peman sou telefòn ap vini.",
+      "supportTitle": "Sipò an kreyòl",
+      "supportBody": "Yon ekip ki reponn ou an kreyòl, an fransè ak an anglè."
+    }
+  },
+  "categories": {
+    "electronics": "Elektwonik",
+    "household": "Kay",
+    "beauty": "Bote",
+    "fashion": "Mòd"
+  },
+  "payment": {
+    "cod": "Peye lè yo livre",
+    "comingSoon": "Byento disponib"
+  },
+  "footer": {
+    "tagline": "Mache ayisyen. Pri an goud, machann ki verifye.",
+    "rights": "Tout dwa rezève."
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "SITE-WEB — Haitian marketplace",
+    "description": "Buy from verified sellers across Haiti. Prices in gourdes, cash on delivery, tracked shipping."
+  },
+  "nav": {
+    "brand": "SITE-WEB",
+    "home": "Home",
+    "explore": "Explore",
+    "favorites": "Favorites",
+    "cart": "Cart",
+    "account": "Account",
+    "signIn": "Sign in",
+    "becomeSeller": "Become a seller",
+    "openMenu": "Open menu",
+    "primaryLabel": "Main navigation"
+  },
+  "search": {
+    "label": "Search for a product or a shop",
+    "placeholder": "Search a product, a shop…"
+  },
+  "locale": {
+    "label": "Change language"
+  },
+  "theme": {
+    "label": "Change theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "home": {
+    "hero": {
+      "badge": "Cash on delivery",
+      "title": "Shop anywhere in Haiti,",
+      "titleAccent": "with confidence",
+      "lede": "Verified sellers, prices in gourdes, tracked delivery to your door.",
+      "ctaPrimary": "Explore the marketplace",
+      "ctaSecondary": "Become a seller"
+    },
+    "stats": {
+      "shops": "Registered shops",
+      "products": "Products online",
+      "currency": "Single currency"
+    },
+    "categories": {
+      "title": "Categories",
+      "productCount": "{count, plural, =0 {No products} one {# product} other {# products}}"
+    },
+    "shops": {
+      "title": "Featured shops",
+      "seeAll": "See all",
+      "emptyTitle": "No shops registered yet",
+      "emptyBody": "The first sellers are on their way. Check back soon."
+    },
+    "products": {
+      "title": "Popular products",
+      "seeAll": "See all",
+      "emptyTitle": "No products yet",
+      "emptyBody": "The catalogue opens as soon as the first shops sign up."
+    },
+    "trust": {
+      "title": "Order with confidence",
+      "deliveryTitle": "Delivery across Haiti",
+      "deliveryBody": "Port-au-Prince, Cap-Haïtien, Les Cayes and the main cities, tracked at every step.",
+      "paymentTitle": "Pay in gourdes",
+      "paymentBody": "On delivery, once the parcel is in your hands. Mobile payments are coming.",
+      "supportTitle": "Support in Creole",
+      "supportBody": "A team that answers in Creole, French and English."
+    }
+  },
+  "categories": {
+    "electronics": "Electronics",
+    "household": "Home",
+    "beauty": "Beauty",
+    "fashion": "Fashion"
+  },
+  "payment": {
+    "cod": "Cash on delivery",
+    "comingSoon": "Coming soon"
+  },
+  "footer": {
+    "tagline": "Haitian marketplace. Prices in gourdes, verified sellers.",
+    "rights": "All rights reserved."
+  }
+}
