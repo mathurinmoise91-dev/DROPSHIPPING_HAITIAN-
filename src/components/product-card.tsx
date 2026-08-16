@@ -1,10 +1,18 @@
+import Image from "next/image";
 import { ShoppingCart, Star } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { formatPrice, type Product } from "@/lib/products";
+import productImages from "@/lib/product-images.json";
 import { cn } from "@/lib/utils";
+
+/**
+ * Written by scripts/generate-product-images.mjs. Products missing from it fall
+ * back to the gradient placeholder, so the grid renders before any image exists.
+ */
+const images: Record<string, string> = productImages;
 
 const badgeLabels: Record<NonNullable<Product["badge"]>, string> = {
   nouveau: "Nouveau",
@@ -17,20 +25,29 @@ function discountPercent(price: number, compareAt: number) {
 }
 
 export function ProductCard({ product }: { product: Product }) {
-  const { name, category, price, compareAt, rating, reviews, badge, inStock } =
+  const { id, name, category, price, compareAt, rating, reviews, badge, inStock } =
     product;
+  const image = images[id];
 
   return (
     <Card className="group gap-0 overflow-hidden py-0 transition-shadow duration-200 hover:shadow-lg">
-      {/*
-        Placeholder media block. The aspect ratio is fixed so swapping in real
-        supplier images doesn't shift the grid (CLS).
-      */}
+      {/* The 1:1 slot is fixed whether or not an image exists, so generating
+          one later never shifts the grid (CLS). */}
       <div className="relative aspect-square bg-muted">
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-cta/15"
-        />
+        {image ? (
+          <Image
+            src={image}
+            alt={name}
+            fill
+            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+            className="object-cover"
+          />
+        ) : (
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-cta/15"
+          />
+        )}
         {badge ? (
           <Badge
             variant={badge === "rupture" ? "secondary" : "default"}

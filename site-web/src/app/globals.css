@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Direction « Fer Découpé ».
+
+  Indigo profond as the ground, copper as the warm action colour, silver green
+  reserved for trust signals (in stock, paid, delivered), warm ink for text and
+  light paper for surfaces. Red is never decorative: it only ever means an error
+  or a cancellation.
+
+  Every pair in use was measured against WCAG AA, in both themes.
+*/
+:root {
+  --paper: #f6f3ec;
+  --raised: #fffdf8;
+  --ink: #1b1714;
+  --ink-soft: #5a5550;
+  --ink-faint: #8b847c;
+
+  --indigo: #2b3170;
+  --indigo-deep: #1e2257;
+  --on-indigo: #f6f3ec;
+
+  --copper: #9a4f21;
+  --copper-lit: #d98e5a;
+  --on-copper: #ffffff;
+
+  --sage: #9dbbaa;
+  --sage-deep: #3f6b55;
+  --on-sage: #1b1714;
+
+  --danger: #a8321f;
+  --on-danger: #ffffff;
+
+  --rule: #ded8cc;
+  --rule-soft: #eae5da;
+
+  --radius: 0.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --paper: #14120f;
+    --raised: #1e1b17;
+    --ink: #ede9e1;
+    --ink-soft: #a39c93;
+    --ink-faint: #7d766d;
+
+    --indigo: #9aa6e8;
+    --indigo-deep: #171a44;
+    --on-indigo: #f6f3ec;
+
+    --copper: #e5a170;
+    --copper-lit: #e5a170;
+    --on-copper: #14120f;
+
+    --sage: #9dbbaa;
+    --sage-deep: #9dbbaa;
+    --on-sage: #1b1714;
+
+    --danger: #e8836f;
+    --on-danger: #14120f;
+
+    --rule: #332e28;
+    --rule-soft: #262219;
+  }
+}
+
+.dark {
+  --paper: #14120f;
+  --raised: #1e1b17;
+  --ink: #ede9e1;
+  --ink-soft: #a39c93;
+  --ink-faint: #7d766d;
+
+  --indigo: #9aa6e8;
+  --indigo-deep: #171a44;
+  --on-indigo: #f6f3ec;
+
+  --copper: #e5a170;
+  --copper-lit: #e5a170;
+  --on-copper: #14120f;
+
+  --sage: #9dbbaa;
+  --sage-deep: #9dbbaa;
+  --on-sage: #1b1714;
+
+  --danger: #e8836f;
+  --on-danger: #14120f;
+
+  --rule: #332e28;
+  --rule-soft: #262219;
+}
+
+@theme inline {
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: var(--paper);
+  --color-raised: var(--raised);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-indigo: var(--indigo);
+  --color-indigo-deep: var(--indigo-deep);
+  --color-on-indigo: var(--on-indigo);
+  --color-copper: var(--copper);
+  --color-copper-lit: var(--copper-lit);
+  --color-on-copper: var(--on-copper);
+  --color-sage: var(--sage);
+  --color-sage-deep: var(--sage-deep);
+  --color-on-sage: var(--on-sage);
+  --color-danger: var(--danger);
+  --color-on-danger: var(--on-danger);
+  --color-rule: var(--rule);
+  --color-rule-soft: var(--rule-soft);
+
+  --radius-md: calc(var(--radius) - 0.25rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.25rem);
+}
+
+@layer base {
+  body {
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  /* Prices, stock counts and order totals line up in columns. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--copper);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /*
+    Cut-metal lattice, abstracted from the fer découpé tradition of
+    Croix-des-Bouquets. Drawn as SVG so it stays sharp at any size, weighs a few
+    hundred bytes, and recolours through currentColor.
+  */
+  .motif {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='66' height='66' viewBox='0 0 66 66'%3E%3Cg fill='none' stroke='%23f6f3ec' stroke-width='1.4'%3E%3Ccircle cx='33' cy='33' r='13'/%3E%3Cpath d='M33 6 L42 33 L33 60 L24 33 Z'/%3E%3Cpath d='M6 33 L33 24 L60 33 L33 42 Z'/%3E%3Ccircle cx='0' cy='0' r='5'/%3E%3Ccircle cx='66' cy='0' r='5'/%3E%3Ccircle cx='0' cy='66' r='5'/%3E%3Ccircle cx='66' cy='66' r='5'/%3E%3C/g%3E%3Ccircle cx='33' cy='33' r='3.2' fill='%23f6f3ec'/%3E%3C/svg%3E");
+    background-size: 66px 66px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

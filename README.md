@@ -23,6 +23,64 @@ npm run build   # build de production
 npm run lint
 ```
 
+## Android / Termux
+
+Next.js ne tourne pas nativement sous Termux. Il compile avec SWC, distribué en
+binaires précompilés, et les cibles Android ont été abandonnées après la v13
+(`android-arm-eabi` s'arrête à 12.3.4, `android-arm64` à 13.2.5). Le 32 bits ARM
+sous Linux s'arrête lui à 12.3.6. Sur ces plateformes `next dev` démarre puis
+échoue avec `Failed to load SWC binary for android/arm`.
+
+Trois issues, de la plus fiable à la plus bricolée :
+
+1. **Un ordinateur** (Linux, macOS ou Windows, x64 ou arm64). Tout fonctionne sans
+   réglage.
+2. **Une distribution Linux dans Termux**, via `proot-distro` (Debian ou Ubuntu en
+   arm64). L'environnement se présente alors comme `linux`/`arm64`, et le binaire
+   `@next/swc-linux-arm64-gnu` s'installe normalement. Demande un appareil et un
+   Termux 64 bits.
+3. **La solution de repli WebAssembly**, sur place :
+
+   ```bash
+   npm run setup:wasm
+   npm run dev:webpack
+   ```
+
+   Le repli WASM ne fonctionne qu'avec webpack, pas avec Turbopack — d'où les
+   scripts `dev:webpack` et `build:webpack`. Comptez une compilation plus lente
+   qu'en natif.
+
+   **`npm install @next/swc-wasm-nodejs` seul ne suffit pas**, et c'est
+   contre-intuitif : Next ne résout pas ce binding comme un module npm. Dans
+   `next/dist/build/swc/index.js`, il appelle `pathToFileURL(pkgPath)` — il traite
+   donc le nom comme un *chemin de fichier*, et ne regarde jamais dans
+   `node_modules/@next/`. Son propre repli télécharge le package vers
+   `node_modules/next/wasm/`, et quand ce téléchargement échoue le message est
+   trompeur :
+
+   ```
+   Attempted to load @next/swc-wasm-nodejs, but it was not installed
+   ```
+
+   … alors que le package est bel et bien installé, un dossier à côté.
+
+   `setup:wasm` récupère donc le tarball depuis le registre npm et l'extrait
+   directement dans `node_modules/next/wasm/@next/`. Il n'appelle pas `npm`, pour
+   deux raisons : npm 12 applique une politique `allowScripts` qui refuse certains
+   installs projet avec `EALLOWSCRIPTS`, et tout `npm install` risque de réécrire
+   `package-lock.json`, dont l'état modifié bloque ensuite `git pull`. Ce package
+   ne contient aucun script d'installation, l'extraction suffit.
+
+   Le script est idempotent et vérifie que la version correspond exactement à
+   celle de Next. Il a besoin de `tar` (`pkg install tar` sur Termux).
+   `--force` refait l'opération.
+
+   À relancer après un `npm install` qui aurait nettoyé `node_modules`.
+
+`next.config.mjs` est volontairement en ESM et non en TypeScript : charger une
+config TS réclame le binaire SWC, ce qui ferait échouer le démarrage avant même
+d'arriver au code de l'application.
+
 ## Design system
 
 Les tokens vivent dans `src/app/globals.css`, en variables CSS mappées vers Tailwind
@@ -60,6 +118,62 @@ src/
     utils.ts     helper cn()
 ```
 
+## Images produits (Higgsfield)
+
+Les visuels sont générés par `scripts/generate-product-images.mjs`, qui utilise le
+SDK `@higgsfield/client`.
+
+**Pourquoi le SDK et pas la CLI Higgsfield.** La CLI est un binaire précompilé publié
+pour `darwin`/`linux` en `x64`/`arm64` uniquement : elle ne s'installe pas sur
+Android/Termux (`EBADPLATFORM`), et son `auth login` passe par un OAuth avec callback
+sur `localhost`, inutilisable depuis un environnement distant. Le SDK est du
+JavaScript pur et s'authentifie par clé API, donc il fonctionne partout.
+
+### Configurer la clé
+
+Récupérez une clé API dans le tableau de bord Higgsfield, puis :
+
+```bash
+export HF_API_KEY=<key_id>
+export HF_API_SECRET=<key_secret>
+# ou, en une seule variable :
+export HF_CREDENTIALS=<key_id>:<key_secret>
+```
+
+### Générer
+
+```bash
+npm run gen:images                              # simulation, ne dépense rien
+npm run gen:images -- --yes                     # génère les images manquantes
+npm run gen:images -- --only <id> --yes         # un seul produit
+npm run gen:images -- --force --yes             # refait celles qui existent déjà
+```
+
+Sans `--yes`, le script se contente de lister ce qu'il ferait : chaque image consomme
+des crédits Higgsfield (2 crédits par image en 1k, mesuré).
+
+### Télécharger des images déjà générées
+
+Génération et téléchargement ne se font pas forcément au même endroit : certains
+environnements joignent l'API Higgsfield mais pas son CDN. `src/lib/product-sources.json`
+associe donc un id de produit à l'URL de son image générée, et un second script se
+charge du rapatriement :
+
+```bash
+npm run fetch:images            # télécharge les URL de product-sources.json
+npm run fetch:images -- --force # re-télécharge celles déjà présentes
+```
+
+Ce script n'appelle pas l'API : ni clé, ni crédit. Une image qui échoue au
+téléchargement est retirée du manifeste, pour que le site ne pointe jamais vers un
+fichier absent.
+
+Les fichiers atterrissent dans `public/products/`, et le script écrit
+`src/lib/product-images.json`, qui associe un id de produit à son chemin. La carte
+produit lit ce manifeste : un produit absent garde le dégradé de remplacement, ce qui
+permet à la grille de s'afficher avant qu'aucune image n'existe. Le créneau reste en
+1:1 dans les deux cas, donc ajouter une image ne décale jamais la mise en page.
+
 ## État actuel
 
 La page d'accueil est en place (hero, grille produits, réassurance, CTA final).
@@ -71,8 +185,10 @@ Ce qui n'existe pas encore :
 - `src/lib/products.ts` est un catalogue en dur, à remplacer par le flux du
   fournisseur dropshipping.
 - Le panier est un bouton sans état ; aucune logique de commande ni de paiement.
-- Les visuels produits sont des dégradés de remplacement, au bon ratio pour éviter
-  le décalage de mise en page une fois les vraies images branchées.
+- Une seule image produit a été générée (`casque-bluetooth-pro`), et son URL est
+  dans `product-sources.json`. Elle n'est pas encore dans le dépôt : lancez
+  `npm run fetch:images` pour la récupérer. Les 7 autres produits affichent le
+  dégradé de remplacement.
 
 ## Skills IA
 

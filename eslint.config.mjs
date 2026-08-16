@@ -14,6 +14,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Vendored AI skill scripts, not part of the app build.
     ".claude/**",
+    // The marketplace rebuild is a separate app with its own config,
+    // dependencies and path aliases. It is linted and built from site-web/.
+    "site-web/**",
   ]),
 ]);
 
