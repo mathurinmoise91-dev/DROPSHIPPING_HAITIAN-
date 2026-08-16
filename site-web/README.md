@@ -24,6 +24,15 @@ npm run lint
 npm run check:i18n     # parité des traductions
 ```
 
+## Déploiement
+
+Projet Vercel `site-web`, lié au dépôt avec `site-web` comme répertoire racine —
+l'application à la racine du dépôt a son propre projet, `kay-boutik`, et les deux
+se déploient indépendamment.
+
+La branche de production est `main`. Tant que cette refonte n'y est pas fusionnée,
+seules les branches de travail produisent des aperçus.
+
 ## Langues
 
 Français par défaut, kreyòl ayisyen et anglais. Chaque langue a son préfixe
